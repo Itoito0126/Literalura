@@ -7,8 +7,6 @@ import com.DesafioAlura.Literalura.Model.Libro;
 import com.DesafioAlura.Literalura.Repositorio.LibroRepository;
 import com.DesafioAlura.Literalura.Service.ConsumoAPI;
 import com.DesafioAlura.Literalura.Service.ConvierteDatos;
-import org.hibernate.exception.ConstraintViolationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
@@ -17,12 +15,10 @@ import java.util.stream.Collectors;
 public class Main {
 
     private Scanner Teclado = new Scanner(System.in);
-    private ConsumoAPI consumoApi = new ConsumoAPI();
     private final String URL_BASE = "https://gutendex.com/books/";
     private ConvierteDatos conversor = new ConvierteDatos();
     private List<DatosLibro> datosLibros = new ArrayList<>();
     private LibroRepository repositorio;
-    private List<Libro> libros;
 
     public Main(LibroRepository repository){
         this.repositorio = repository;
@@ -74,26 +70,6 @@ public class Main {
                     System.out.println("Opción inválida");
             }
         }
-
-
-//
-        //Búsqueda de libros por nombre
-//        System.out.println("Ingrese el nombre del libro que desea buscar");
-//        var TituloLibro = Teclado.nextLine();
-//        var json = ConsumoAPI.ObtenerDatos(URL_BASE + "?search=" + TituloLibro.replace(" ", "+"));
-//        var DatosBusqueda = conversor.ObtenerDatos(json, Datos.class);
-//        Optional<DatosLibro> LibroBuscado = DatosBusqueda.resultados().stream()
-//                .filter(l -> l.titulo().toUpperCase().contains(TituloLibro.toUpperCase()))
-//                .findFirst();
-//        if (LibroBuscado.isPresent()){
-//            System.out.println("Libro Encontrado ");
-//            System.out.println(LibroBuscado.get());
-//        }
-//        else {
-//            System.out.println("Libro no encontrado");
-//        }
-//
-//
     }
 
     private DatosLibro getDatosLibro(){
@@ -103,7 +79,6 @@ public class Main {
 
         Datos datos = conversor.ObtenerDatos(json, Datos.class);
 
-        // Verifica si hay resultados y retorna solo el primer libro
         if (datos.resultados() != null && !datos.resultados().isEmpty()) {
             DatosLibro libro = datos.resultados().get(0);
 
@@ -121,7 +96,6 @@ public class Main {
                 }
             }
             catch (DataIntegrityViolationException e) {
-                // Captura la excepción de clave duplicada
                 System.out.println("Error: El libro '" + libro.titulo() + "' ya existe en la base de datos.");
                 return null;
             }

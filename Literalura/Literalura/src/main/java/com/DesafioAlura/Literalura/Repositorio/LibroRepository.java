@@ -20,7 +20,6 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @Query("SELECT DISTINCT l FROM Libro l JOIN FETCH l.autor a WHERE a.fechaDeNacimiento <= :anio AND (a.fechaDeMuerte IS NULL OR a.fechaDeMuerte >= :anio)")
     List<Libro> obtenerAutoresVivosDurante(@Param("anio") int anio);
 
-    //@Query("SELECT l FROM Libro l WHERE :idioma MEMBER OF l.idiomas")
     @Query("SELECT l FROM Libro l JOIN FETCH l.idiomas WHERE :idioma MEMBER OF l.idiomas")
     List<Libro> obtenerLibrosPorIdioma(@Param("idioma") String idioma);
 }
